@@ -1,48 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <style>
-    body {
-      transition: background 0.5s, color 0.5s;
-    }
-    .dark {
-      background: #121212;
-      color: white;
-    }
-    .pulse {
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Animation Demo</title>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            transition: background-color 0.5s, color 0.5s;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Theme Styles */
+        .light {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .dark {
+            background-color: #121212;
+            color: #f5f5f5;
+        }
+
+        /* Animated Elements */
+        .animated-box {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            margin: 30px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            
+            /* Animation Properties */
+            animation: float 3s ease-in-out infinite;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .animated-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Keyframe Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Buttons */
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        #themeToggle {
+            background: #4a90e2;
+            color: white;
+        }
+
+        #animateBtn {
+            background: #50c878;
+            color: white;
+        }
+
+        .pulse-effect {
+            animation: pulse 1s infinite;
+        }
+    </style>
 </head>
-<body>
-  <button id="themeToggle">Toggle Dark Mode</button>
-  <button id="animateBtn">Pulse Animation</button>
+<body class="light">
+    <h1>Interactive Animation Demo</h1>
+    
+    <div class="animated-box"></div>
+    
+    <div class="controls">
+        <button id="themeToggle">Toggle Dark Mode</button>
+        <button id="animateBtn">Toggle Pulse Animation</button>
+    </div>
 
-  <script>
-    // Theme switcher with localStorage
-    const themeToggle = document.getElementById("themeToggle");
-    const animateBtn = document.getElementById("animateBtn");
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const animateBtn = document.getElementById('animateBtn');
+        const animatedBox = document.querySelector('.animated-box');
+        const body = document.body;
 
-    // Load saved theme
-    const currentTheme = localStorage.getItem("theme") || "light";
-    document.body.className = currentTheme;
+        // Load saved theme preference
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('themePreference');
+            if (savedTheme) {
+                body.className = savedTheme;
+            }
+        }
 
-    // Toggle theme
-    themeToggle.addEventListener("click", () => {
-      const newTheme = document.body.classList.contains("dark") ? "light" : "dark";
-      document.body.className = newTheme;
-      localStorage.setItem("theme", newTheme);
-    });
+        // Toggle theme and save preference
+        function toggleTheme() {
+            if (body.classList.contains('light')) {
+                body.className = 'dark';
+            } else {
+                body.className = 'light';
+            }
+            localStorage.setItem('themePreference', body.className);
+        }
 
-    // Trigger animation
-    animateBtn.addEventListener("click", () => {
-      animateBtn.classList.toggle("pulse");
-    });
-  </script>
+        // Toggle pulse animation
+        function togglePulseAnimation() {
+            animatedBox.classList.toggle('pulse-effect');
+        }
+
+        // Event Listeners
+        themeToggle.addEventListener('click', toggleTheme);
+        animateBtn.addEventListener('click', togglePulseAnimation);
+
+        // Initialize
+        loadThemePreference();
+    </script>
 </body>
 </html>
